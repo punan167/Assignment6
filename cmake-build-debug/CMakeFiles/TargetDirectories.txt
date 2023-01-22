@@ -1,0 +1,3 @@
+/home/amp/Desktop/COGING PLACE/assign6/cmake-build-debug/CMakeFiles/assign6.dir
+/home/amp/Desktop/COGING PLACE/assign6/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/amp/Desktop/COGING PLACE/assign6/cmake-build-debug/CMakeFiles/rebuild_cache.dir
