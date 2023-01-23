@@ -1,11 +1,16 @@
 #include "stdio.h"
+#include "stdlib.h"
 #define SIZE 3
 void printingAllData();
 void login();
 int charCounting(char toCount[50]);
 void myStrCmp(char userInputChar[50]);
 void mailCheck(char toCheck[50]);
+void passChecking(char pass[50],int userIndex);
+void recordingAllDataToFile();
+void userActionSector();
 int eFound=-1;
+int pFound = -1;
 char gmail[11]="@gmail.com";
 
 struct Worker{
@@ -49,6 +54,7 @@ void printingAllData(){
 };
 void login(){
     char lEmail[50]; //user Input
+    char passWord[50];
     int found = -1;
     printf("This is Login Form.\n");
     printf("Enter you Email:");
@@ -56,10 +62,16 @@ void login(){
 
     eFound = -1;
     myStrCmp(lEmail);
-    if(eFound!=1){
-        printf("Welcome Sir: %s ",info[eFound].name);
+
+    printf("Enter Your Password:");
+    scanf(" %[^\n]",&passWord);
+
+    pFound = -1;
+    passChecking(passWord,eFound);
+    if(eFound!=1 && pFound == 1){
+        userActionSector();
     } else{
-        printf("invalid email.\n");
+        printf("invalid email or password.\n");
         login();
     }
 
@@ -84,9 +96,29 @@ void myStrCmp(char userInputChar[50]){
         }
     };
 
-
-
 }
+
+void passChecking(char pass[50],int userIndex){
+    int passCount=charCounting(pass);
+    int infoPassCount = charCounting(info[userIndex].password);
+    int sameCount = 0;
+    if(passCount==infoPassCount){
+        for(int ncc=0; ncc<passCount;ncc++){
+            if(pass[ncc] == info[userIndex].password[ncc]){
+                sameCount++;
+            } else{
+                break;
+            }
+        }
+        if(sameCount == passCount){
+            pFound = 1;
+        }
+    }
+
+
+
+};
+
 int charCounting(char toCount[50]){
     int charCount = 0;
     for(int gcc=0;gcc<50;gcc++){
@@ -127,3 +159,39 @@ void mailCheck(char toCheck[50]){
         printf("invalid Email\n");
     }
 };
+
+void recordingAllDataToFile(){
+    FILE *fptr = fopen ("dipDb.txt", 'w');
+
+    if(fptr == NULL){
+        printf("Error at recordingAllDataToFile fun();\n");
+    } else{
+        for(int gcc=0;gcc<3;gcc++){
+            fprintf(fptr,"%d %s %s %s %c",info[gcc].age,info[gcc].name,info[gcc].email,info[gcc].password,'\n');
+        }
+        printf("Recording all data to dipDB.txt is complete!\n");
+    }
+
+}
+
+void userActionSector(){
+    int userAction=0;
+    printf("Welcome Sir: %s \n",info[eFound].name);
+    printf("Press 1 to User Action Sector:\n");
+    printf("Press 2 to Home:\n");
+    printf("Press 3 to Exit:\n");
+    scanf("%d",&userAction);
+
+    if(userAction == 1){
+        printf("this is user action sector:\n");
+    } else if(userAction==2){
+        login();
+    }else if(userAction==3) {
+        recordingAllDataToFile();
+    } else{
+        printf("Invalid Option");
+    }
+
+
+
+}
